@@ -27,7 +27,7 @@ or
 ```sh
 $ quiterss-backup --backup
 ```
-#### To restore from backupfile (if [file] not provided, script will use "quiterss-backup.tar.gz")
+#### To restore from backupfile (if _file_ not provided, script will use _quiterss-backup.tar.gz_)
 ```sh
 $ quiterss-backup -r [file]
 ```
