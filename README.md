@@ -1,6 +1,6 @@
 # QuiteRSS Backup
 
-Simple script, which provides better backup options for [QuiteRSS](https://quiterss.org) news reader, than the build-in one.
+Simple script, which provides better backup options for [QuiteRSS](https://quiterss.org), than the build-in one.
 
 ## Instalation
 To install this script simply use this command with root privileges:
