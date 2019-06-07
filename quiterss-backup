@@ -7,6 +7,9 @@ case $1 in
 "-b"|"--backup-no-date")
     command tar -czf ./quiterss-backup.tar.gz -C $HOME .config/QuiteRss/ .local/share/QuiteRss/
     ;;
+"-c"|"--custom-name")
+    command tar -czf "./$2.tar.gz" -C $HOME .config/QuiteRss/ .local/share/QuiteRss/
+    ;;
 "-r"|"--restore")
     if [ -z "$2" ]; then
         if [ -e ./quiterss-backup.tar.gz ]; then
