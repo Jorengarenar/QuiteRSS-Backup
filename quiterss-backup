@@ -1,31 +1,52 @@
 #!/bin/bash
 
-case $1 in
-'')
-    command tar -czf ./quiterss-backup_$(command date '+%F_%R').tar.gz -C $HOME .config/QuiteRss/ .local/share/QuiteRss/
-    ;;
-"-b"|"--backup-no-date")
-    command tar -czf ./quiterss-backup.tar.gz -C $HOME .config/QuiteRss/ .local/share/QuiteRss/
-    ;;
-"-c"|"--custom-name")
-    command tar -czf "./$2.tar.gz" -C $HOME .config/QuiteRss/ .local/share/QuiteRss/
-    ;;
-"-r"|"--restore")
-    if [ -z "$2" ]; then
-        if [ -e ./quiterss-backup.tar.gz ]; then
-            command tar -xzf ./quiterss-backup.tar.gz -C $HOME
+VERSION=0.6
+PROGNAME="$(basename $0)"
+
+usage() {
+    echo "Usage: "$PROGNAME" [options] <file>"
+    echo
+    echo "Options:"
+    echo "    * no option *      Creates 'quiterss-backup_<DATE>.tar.gz' backup file"
+    echo "    -h, --help         Show this help"
+    echo "    -v, --version      Print version number"
+    echo "    -b, --backup       Creates 'quiterss-backup.tar.gz' backup file"
+    echo "    -c, --custom-name  Creates backup file with user defined filename"
+    echo "    -r, --restore      Restores from 'quiterss-backup.tar.gz' or from given file path"
+}
+
+case "$1" in
+    '')
+        command tar -czf ./quiterss-backup_$(command date '+%F_%R').tar.gz -C $HOME .config/QuiteRss/ .local/share/QuiteRss/
+        ;;
+    -h|--help)
+        usage
+        ;;
+    -v|--version)
+        echo $VERSION
+        ;;
+    -b,--backup)
+        command tar -czf ./quiterss-backup.tar.gz -C $HOME .config/QuiteRss/ .local/share/QuiteRss/
+        ;;
+    -c|--custom-name)
+        command tar -czf "./$2.tar.gz" -C $HOME .config/QuiteRss/ .local/share/QuiteRss/
+        ;;
+    -r|--restore)
+        if [ -z "$2" ]; then
+            if [ -e ./quiterss-backup.tar.gz ]; then
+                command tar -xzf ./quiterss-backup.tar.gz -C $HOME
+            else
+                echo "Please provide the path to backup file"
+            fi
         else
-            echo "Please provide the path to backup file"
+            if [ -e $2 ]; then
+                command tar -xzf $2 -C $HOME
+            else
+                echo " $2  - file doesn't exist"
+            fi
         fi
-    else
-        if [ -e $2 ]; then
-            command tar -xzf $2 -C $HOME
-        else
-            echo " $2  - file doesn't exist"
-        fi
-    fi
-    ;;
-*)
-    echo " $1 - no such option"
-    ;;
+        ;;
+    *)
+        echo " $1 - no such option"
+        ;;
 esac
