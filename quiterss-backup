@@ -4,7 +4,7 @@ VERSION=0.6
 PROGNAME="$(basename $0)"
 
 usage() {
-    echo "Usage: "$PROGNAME" [options] <file>"
+    echo "Usage: "$PROGNAME" [options] [file]"
     echo
     echo "Options:"
     echo "    * no option *      Creates 'quiterss-backup_<DATE>.tar.gz' backup file"
