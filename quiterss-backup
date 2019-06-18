@@ -25,7 +25,7 @@ case "$1" in
     -v|--version)
         echo $VERSION
         ;;
-    -b,--backup)
+    -b|--backup)
         command tar -czf ./quiterss-backup.tar.gz -C $HOME .config/QuiteRss/ .local/share/QuiteRss/
         ;;
     -c|--custom-name)
