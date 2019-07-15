@@ -5,13 +5,13 @@ Simple script, which provides better backup options for [QuiteRSS](https://quite
 ## Instalation
 To install this script simply use this command with root privileges:
 ```sh
-$ make install
+# make install
 ```
 
 ### Uninstalation
 To uninstall this script simply use this command with root privileges:
 ```sh
-$ make uninstall
+# make uninstall
 ```
 
 ## Usage
