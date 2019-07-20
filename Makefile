@@ -7,9 +7,9 @@ all:
 	@echo "Run 'make uninstall' for uninstallation."
 
 install:
-	install -Dm755 $(PROGNAME) $(DESTDIR)$(BINDIR)/$(PROGNAME)
-	install -Dm644 bash_completion $(DESTDIR)$(PREFIX)/share/bash-completion/completions/$(PROGNAME)
+	install -Dm755 $(PROGNAME) $(BINDIR)/$(PROGNAME)
+	install -Dm644 bash_completion $(PREFIX)/share/bash-completion/completions/$(PROGNAME)
 
 uninstall:
-	rm -f $(DESTDIR)$(BINDIR)/$(PROGNAME)
-	rm -f $(DESTDIR)$(PREFIX)/share/bash-completion/completions/$(PROGNAME)
+	rm -f $(BINDIR)/$(PROGNAME)
+	rm -f $(PREFIX)/share/bash-completion/completions/$(PROGNAME)
