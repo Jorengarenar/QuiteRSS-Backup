@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=0.6.1
+VERSION=0.6.2
 PROGNAME="$(basename $0)"
 
 usage() {
@@ -15,9 +15,14 @@ usage() {
     echo "    -r, --restore      Restores from 'quiterss-backup.tar.gz' or from given file path"
 }
 
+CONFIG="${XDG_CONFIG_HOME:-.config}/QuiteRss"
+CONFIG="${CONFIG#"$HOME/"}"
+DATA="${XDG_DATA_HOME:-.local/share}/QuiteRss"
+DATA="${DATA#"$HOME/"}"
+
 case "$1" in
     '')
-        command tar -czf ./quiterss-backup_$(command date '+%F_%R').tar.gz -C $HOME .config/QuiteRss/ .local/share/QuiteRss/
+        command tar -czf ./quiterss-backup-$(command date +"%Y%m%d_%H%M%S").tar.gz -C "$HOME" "$CONFIG" "$DATA"
         ;;
     -h|--help)
         usage
@@ -26,10 +31,10 @@ case "$1" in
         echo $VERSION
         ;;
     -b|--backup)
-        command tar -czf ./quiterss-backup.tar.gz -C $HOME .config/QuiteRss/ .local/share/QuiteRss/
+        command tar -czf ./quiterss-backup.tar.gz -C "$CONFIG" "$DATA"
         ;;
     -c|--custom-name)
-        command tar -czf "./$2.tar.gz" -C $HOME .config/QuiteRss/ .local/share/QuiteRss/
+        command tar -czf "./$2.tar.gz" "$CONFIG" "$DATA"
         ;;
     -r|--restore)
         if [ -z "$2" ]; then
