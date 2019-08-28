@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=0.6.2
+VERSION=0.6.3
 PROGNAME="$(basename $0)"
 
 usage() {
@@ -22,7 +22,7 @@ DATA="${DATA#"$HOME/"}"
 
 case "$1" in
     '')
-        command tar -czf ./quiterss-backup-$(command date +"%Y%m%d_%H%M%S").tar.gz -C "$HOME" "$CONFIG" "$DATA"
+        command tar -czf ./quiterss-backup_$(command date +"%Y%m%d-%H%M%S").tar.gz -C "$HOME" "$CONFIG" "$DATA"
         ;;
     -h|--help)
         usage
@@ -31,7 +31,7 @@ case "$1" in
         echo $VERSION
         ;;
     -b|--backup)
-        command tar -czf ./quiterss-backup.tar.gz -C "$CONFIG" "$DATA"
+        command tar -czf ./quiterss-backup.tar.gz -C "$HOME" "$CONFIG" "$DATA"
         ;;
     -c|--custom-name)
         command tar -czf "./$2.tar.gz" "$CONFIG" "$DATA"
