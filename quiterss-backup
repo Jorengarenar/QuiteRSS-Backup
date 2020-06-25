@@ -1,28 +1,50 @@
-#!/bin/bash
+#!/usr/bin/env sh
+# vim: fen
 
-VERSION=0.6.3
+VERSION=0.7.0
 PROGNAME="$(basename $0)"
+
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}"
+DATA="${XDG_DATA_HOME:-$HOME/.local/share}"
+QUITERSS="QuiteRss"
+
+BACKUP_FILENAME="quiterss-backup"
+BACKUP_FILEEXT=".tar.gz"
+BACKUP_DEF_FILE="$BACKUP_FILENAME$BACKUP_FILEEXT"
 
 usage() {
     echo "Usage: "$PROGNAME" [options] [file]"
     echo
     echo "Options:"
-    echo "    * no option *      Creates 'quiterss-backup_<DATE>.tar.gz' backup file"
-    echo "    -h, --help         Show this help"
-    echo "    -v, --version      Print version number"
-    echo "    -b, --backup       Creates 'quiterss-backup.tar.gz' backup file"
+    echo "    * no option *      Creates '$BACKUP_FILENAME_<DATE>$BACKUP_FILEEXT' backup file"
+    echo "    -h, --help         Shows this help"
+    echo "    -v, --version      Prints version number"
+    echo "    -b, --backup       Creates '$BACKUP_DEF_FILE' backup file"
     echo "    -c, --custom-name  Creates backup file with user defined filename"
-    echo "    -r, --restore      Restores from 'quiterss-backup.tar.gz' or from given file path"
+    echo "    -r, --restore      Restores from '$BACKUP_DEF_FILE' or from given file path"
 }
 
-CONFIG="${XDG_CONFIG_HOME:-.config}/QuiteRss"
-CONFIG="${CONFIG#"$HOME/"}"
-DATA="${XDG_DATA_HOME:-.local/share}/QuiteRss"
-DATA="${DATA#"$HOME/"}"
+backup() {
+    BACKUP_FILE="$1"
+    command tar -czP --transform "s,^$CONFIG,config," --transform "s,^$DATA,data," \
+        --exclude=*backup* \
+        -f "$BACKUP_FILE" \
+        "$CONFIG/$QUITERSS" "$DATA/$QUITERSS"
+}
+
+unarchive() {
+    mkdir -p "$3"
+    command tar -C "$3" --strip-components 1 -xzf "$1" "$2/$QUITERSS"
+}
+
+restore() {
+    unarchive "$1" config "$CONFIG"
+    unarchive "$1" data   "$DATA"
+}
 
 case "$1" in
     '')
-        command tar -czf ./quiterss-backup_$(command date +"%Y%m%d-%H%M%S").tar.gz -C "$HOME" "$CONFIG" "$DATA"
+        backup "./$BACKUP_FILENAME_$(command date +"%Y%m%d-%H%M%S")$BACKUP_FILEEXT"
         ;;
     -h|--help)
         usage
@@ -31,27 +53,31 @@ case "$1" in
         echo $VERSION
         ;;
     -b|--backup)
-        command tar -czf ./quiterss-backup.tar.gz -C "$HOME" "$CONFIG" "$DATA"
+        backup "./$BACKUP_DEF_FILE"
         ;;
     -c|--custom-name)
-        command tar -czf "./$2.tar.gz" -C "$HOME" "$CONFIG" "$DATA"
+        if [ -n "$2" ]; then
+            backup "$2"
+        else
+            echo "Please provide the custom name of backup file" 1>&2
+        fi
         ;;
     -r|--restore)
         if [ -z "$2" ]; then
-            if [ -e ./quiterss-backup.tar.gz ]; then
-                command tar -xzf ./quiterss-backup.tar.gz -C "$HOME"
+            if [ -e "./$BACKUP_DEF_FILE" ]; then
+                restore "./$BACKUP_DEF_FILE"
             else
-                echo "Please provide the path to backup file"
+                echo "Please provide the path to backup file" 1>&2
             fi
         else
-            if [ -e $2 ]; then
-                command tar -xzf $2 -C "$HOME"
+            if [ -e "$2" ]; then
+                restore "$2"
             else
-                echo " $2  - file doesn't exist"
+                echo " $2  - file doesn't exist" 1>&2
             fi
         fi
         ;;
     *)
-        echo " $1 - no such option"
+        echo " $1 - no such option" 1>&2
         ;;
 esac
