@@ -1,14 +1,15 @@
 # QuiteRSS Backup
 
-Simple script, which provides better backup options for [QuiteRSS](https://quiterss.org), than the build-in one.
+Simple script, which provides more convenient backup options for
+[QuiteRSS](https://quiterss.org), than the build-in one.
 
-## Instalation
+## Installation
 To install this script simply use this command with root privileges:
 ```sh
 # make install
 ```
 
-### Uninstalation
+### Uninstallation
 To uninstall this script simply use this command with root privileges:
 ```sh
 # make uninstall
@@ -27,7 +28,7 @@ or
 ```sh
 $ quiterss-backup --backup
 ```
-#### To restore from backupfile (if _file_ not provided, script will use _quiterss-backup.tar.gz_)
+#### To restore from backup file (if _file_ not provided, script will use _quiterss-backup.tar.gz_)
 ```sh
 $ quiterss-backup -r [file]
 ```
